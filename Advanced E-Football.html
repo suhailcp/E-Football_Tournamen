@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite E-Football Tournament</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #003366;
+            --accent-color: #001f3f;
+            --light-color: #f8f9fa;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .gradient-header {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .section-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .match-card {
+            border-radius: 12px;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .team {
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+        }
+        
+        .knockout-bracket {
+            background-color: var(--light-color);
+            padding: 30px;
+            border-radius: 12px;
+            min-height: 400px;
+            position: relative;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .bracket-team {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 5px 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .bracket-arrow {
+            font-size: 24px;
+            margin: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        .bracket-match {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            margin: 10px;
+        }
+        
+        .bracket-result {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: gold;
+            color: white;
+            border-radius: 8px;
+            margin: 10px;
+            font-weight: bold;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .match-time {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .team.empty {
+            color: #999;
+        }
+        
+        .tournament-structure {
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+        
+        .structure-line {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .structure-line::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #ddd;
+            z-index: 1;
+        }
+        
+        .structure-team {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 2;
+            margin: 0 20px;
+            font-weight: bold;
+        }
+        
+        .structure-match {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 2;
+            margin: 0 20px;
+        }
+        
+        .structure-arrow {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin: 0 10px;
+            z-index: 2;
+        }
+        
+        .modal-body {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .content-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .content-item {
+            margin-bottom: 10px;
+        }
+        
+        .table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-header">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-trophy me-2"></i>
+                Elite E-Football Tournament
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#structure">Structure</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#groups">Groups</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#matches">Matches</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#standings">Standings</a></li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center ms-3">
+                <button class="btn btn-outline-light" id="adminLoginBtn" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
+                    <i class="bi bi-person-circle me-1"></i> Admin
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Tournament Structure -->
+        <section id="structure" class="mb-5">
+            <div class="section-card bg-white p-4">
+                <h2 class="text-center mb-4 gradient-header text-white p-3">Tournament Structure</h2>
+                <div class="content-box">
+                    <h3 class="mb-3">🎮 E-FOOTBALL TOURNAMENT STRUCTURE</h3>
+                    <div class="content-item">
+                        <h4>✅ FORMAT:</h4>
+                        <ul>
+                            <li>Group Stage: Round Robin within each group</li>
+                            <li>Points: Win = 3 | Draw = 1 | Loss = 0</li>
+                            <li>Top team(s) from each group proceed to Knockouts</li>
+                        </ul>
+                    </div>
+                    <div class="content-item">
+                        <h4>🏆 KNOCKOUTS:</h4>
+                        <ul>
+                            <li>Semifinal 1: Group A1 vs Group B2</li>
+                            <li>Semifinal 2: Group B1 vs Group A2</li>
+                            <li>Winners proceed to GRAND FINAL 👑</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tournament-structure mt-4">
+                    <div class="structure-line">
+                        <div class="structure-team">Group A</div>
+                        <div class="structure-arrow">↓</div>
+                        <div class="structure-match">Semifinal 1</div>
+                        <div class="structure-arrow">↑</div>
+                        <div class="structure-team">Group B</div>
+                    </div>
+                    
+                    <div class="structure-line">
+                        <div class="structure-arrow">↑</div>
+                        <div class="structure-match">Final</div>
+                        <div class="structure-arrow">↑</div>
+                        <div class="structure-result">Winner</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Groups Section -->
+        <section id="groups" class="mb-5">
+            <div class="section-card bg-white p-4">
+                <h2 class="text-center mb-4 gradient-header text-white p-3">Tournament Groups</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header fs-4 fw-bold text-danger">🟥 Group A</div>
+                            <div class="card-body">
+                                <div class="content-box">
+                                    <h3 class="mb-3">Players:</h3>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">🔴 Vidwath</li>
+                                        <li class="list-group-item">🔴 Munees</li>
+                                        <li class="list-group-item">🔴 Shamal</li>
+                                        <li class="list-group-item">🔴 Zaad</li>
+                                        <li class="list-group-item">🔴 Rithin</li>
+                                    </ul>
+                                </div>
+                                <div class="content-box mt-4">
+                                    <h3 class="mb-3">🎮 Match Fixtures:</h3>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Rithin vs Vidwath</li>
+                                        <li class="list-group-item">Munees vs Shamal</li>
+                                        <li class="list-group-item">Shamal vs Zaad</li>
+                                        <li class="list-group-item">Munees vs Rithin</li>
+                                        <li class="list-group-item">Rithin vs Zaad</li>
+                                        <li class="list-group-item">Vidwath vs Munees</li>
+                                        <li class="list-group-item">Vidwath vs Shamal</li>
+                                        <li class="list-group-item">Zaad vs Munees</li>
+                                        <li class="list-group-item">Rithin vs Shamal</li>
+                                        <li class="list-group-item">Vidwath vs Zaad</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header fs-4 fw-bold text-primary">🔵 Group B</div>
+                            <div class="card-body">
+                                <div class="content-box">
+                                    <h3 class="mb-3">Players:</h3>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">🔵 Shamil</li>
+                                        <li class="list-group-item">🔵 Adhil</li>
+                                        <li class="list-group-item">🔵 Fudhail</li>
+                                        <li class="list-group-item">🔵 Abin</li>
+                                        <li class="list-group-item">🔵 Dinshad</li>
+                                    </ul>
+                                </div>
+                                <div class="content-box mt-4">
+                                    <h3 class="mb-3">🎮 Match Fixtures:</h3>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Abin vs Adhil</li>
+                                        <li class="list-group-item">Shamil vs Fudhail</li>
+                                        <li class="list-group-item">Fudhail vs Dinshad</li>
+                                        <li class="list-group-item">Shamil vs Abin</li>
+                                        <li class="list-group-item">Adhil vs Dinshad</li>
+                                        <li class="list-group-item">Shamil vs Adhil</li>
+                                        <li class="list-group-item">Dinshad vs Abin</li>
+                                        <li class="list-group-item">Abin vs Fudhail</li>
+                                        <li class="list-group-item">Dinshad vs Adhil</li>
+                                        <li class="list-group-item">Shamil vs Dinshad</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Matches Section -->
+        <section id="matches" class="mb-5">
+            <div class="section-card bg-white p-4">
+                <h2 class="text-center mb-4 gradient-header text-white p-3">Match Schedule</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Match</th>
+                                <th>Status</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matchSchedule">
+                            <!-- Matches will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Standings Section -->
+        <section id="standings" class="mb-5">
+            <div class="section-card bg-white p-4">
+                <h2 class="text-center mb-4 gradient-header text-white p-3">Group Standings</h2>
+                <ul class="nav nav-tabs justify-content-center mb-4" id="standingsTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="groupATab" data-bs-toggle="tab" data-bs-target="#groupATabPane">Group A</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="groupBTab" data-bs-toggle="tab" data-bs-target="#groupBTabPane">Group B</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="standingsTabContent">
+                    <div class="tab-pane fade show active" id="groupATabPane">
+                        <div class="table-responsive">
+                            <table id="standingsTableA" class="table table-hover table-striped">
+                                <!-- Standings will be added dynamically -->
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="groupBTabPane">
+                        <div class="table-responsive">
+                            <table id="standingsTableB" class="table table-hover table-striped">
+                                <!-- Standings will be added dynamically -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="modal fade" id="adminModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Admin Dashboard</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3" id="adminTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="updateScoresTab" data-bs-toggle="tab" data-bs-target="#updateScoresTabPane">Update Scores</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="addMatchTab" data-bs-toggle="tab" data-bs-target="#addMatchTabPane">Add Match</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="adminTabContent">
+                        <div class="tab-pane fade show active" id="updateScoresTabPane">
+                            <form id="scoreUpdateForm">
+                                <div class="table-responsive mb-4">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Group</th>
+                                                <th>Match</th>
+                                                <th>Date</th>
+                                                <th>Home</th>
+                                                <th>Away</th>
+                                                <th>Status</th>
+                                                <th>Score</th>
+                                                <th>Goals</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="scoreUpdateTableBody">
+                                            <!-- Scores update form will be added dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="submit" class="btn btn-success">Update Scores</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="addMatchTabPane">
+                            <form id="addMatchForm">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="groupSelect" class="form-label">Group</label>
+                                        <select class="form-select" id="groupSelect" required>
+                                            <option value="A">Group A</option>
+                                            <option value="B">Group B</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="matchDate" class="form-label">Match Date</label>
+                                        <input type="date" class="form-control" id="matchDate" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="homeTeam" class="form-label">Home Team</label>
+                                        <input type="text" class="form-control" id="homeTeam" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="awayTeam" class="form-label">Away Team</label>
+                                        <input type="text" class="form-control" id="awayTeam" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="matchStatus" class="form-label">Status</label>
+                                        <select class="form-select" id="matchStatus" required>
+                                            <option value="upcoming">Upcoming</option>
+                                            <option value="finished">Finished</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="homeScore" class="form-label">Home Score</label>
+                                        <input type="number" class="form-control" id="homeScore" min="0">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="awayScore" class="form-label">Away Score</label>
+                                        <input type="number" class="form-control" id="awayScore" min="0">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Goals</label>
+                                    <div id="goalsList">
+                                        <div class="row mb-2 goal-item">
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" placeholder="Scorer name">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="number" class="form-control" placeholder="Minute" min="1">
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-sm btn-danger remove-goal">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary mt-2 add-goal-btn">
+                                        <i class="bi bi-plus"></i> Add Goal
+                                    </button>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Match</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="modal fade" id="adminLoginModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Admin Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="adminLoginForm">
+                        <div class="mb-3">
+                            <label for="adminId" class="form-label">Admin ID</label>
+                            <input type="text" class="form-control" id="adminId" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adminPass" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="adminPass" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="adminLoginBtn">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Tournament Data
+        const tournamentData = {
+            groups: {
+                A: {
+                    name: "🟥 Group A",
+                    color: "danger",
+                    teams: ["Vidwath", "Munees", "Shamal", "Zaad", "Rithin"],
+                    matches: []
+                },
+                B: {
+                    name: "🔵 Group B",
+                    color: "primary",
+                    teams: ["Shamil", "Adhil", "Fudhail", "Abin", "Dinshad"],
+                    matches: []
+                }
+            },
+            knockout: {
+                quarterfinals: [],
+                semifinals: [],
+                final: []
+            },
+            standings: {
+                A: {},
+                B: {}
+            },
+            admin: {
+                id: "Eadmin",
+                pass: "adminE"
+            }
+        };
+
+        // DOM Elements
+        const matchSchedule = document.getElementById('matchSchedule');
+        const standingsTableA = document.getElementById('standingsTableA');
+        const standingsTableB = document.getElementById('standingsTableB');
+        const adminModal = document.getElementById('adminModal');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const scoreUpdateTableBody = document.getElementById('scoreUpdateTableBody');
+        const adminTab = document.getElementById('adminTab');
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            generateGroupMatches();
+            renderMatches();
+            renderStandings();
+            setupEventListeners();
+        });
+
+        // Functions
+        function generateGroupMatches() {
+            // Generate matches for Group A
+            const groupATeams = tournamentData.groups.A.teams;
+            for (let i = 0; i < groupATeams.length; i++) {
+                for (let j = i + 1; j < groupATeams.length; j++) {
+                    const matchId = tournamentData.groups.A.matches.length + 1;
+                    const date = new Date();
+                    date.setDate(date.getDate() + i + 1);
+                    const matchDate = date.toISOString().split('T')[0];
+                    const matchTime = "19:00";
+                    tournamentData.groups.A.matches.push({
+                        id: matchId,
+                        home: groupATeams[i],
+                        away: groupATeams[j],
+                        date: matchDate,
+                        time: matchTime,
+                        status: "upcoming",
+                        score: null,
+                        goals: []
+                    });
+                }
+            }
+            
+            // Add extra match for one team to ensure 4 matches
+            tournamentData.groups.A.matches.push({
+                id: tournamentData.groups.A.matches.length + 1,
+                home: "Vidwath",
+                away: "Zaad",
+                date: new Date(new Date().setDate(new Date().getDate() + groupATeams.length)).toISOString().split('T')[0],
+                time: "19:00",
+                status: "upcoming",
+                score: null,
+                goals: []
+            });
+            
+            // Generate matches for Group B
+            const groupBTeams = tournamentData.groups.B.teams;
+            for (let i = 0; i < groupBTeams.length; i++) {
+                for (let j = i + 1; j < groupBTeams.length; j++) {
+                    const matchId = tournamentData.groups.B.matches.length + 1;
+                    const date = new Date();
+                    date.setDate(date.getDate() + i + 1);
+                    const matchDate = date.toISOString().split('T')[0];
+                    const matchTime = "20:30";
+                    tournamentData.groups.B.matches.push({
+                        id: matchId,
+                        home: groupBTeams[i],
+                        away: groupBTeams[j],
+                        date: matchDate,
+                        time: matchTime,
+                        status: "upcoming",
+                        score: null,
+                        goals: []
+                    });
+                }
+            }
+            
+            // Add extra match for one team to ensure 4 matches
+            tournamentData.groups.B.matches.push({
+                id: tournamentData.groups.B.matches.length + 1,
+                home: "Shamil",
+                away: "Dinshad",
+                date: new Date(new Date().setDate(new Date().getDate() + groupBTeams.length)).toISOString().split('T')[0],
+                time: "20:30",
+                status: "upcoming",
+                score: null,
+                goals: []
+            });
+        }
+
+        function renderMatches() {
+            matchSchedule.innerHTML = '';
+            
+            // Add matches for Group A
+            const groupATitle = document.createElement('tr');
+            groupATitle.innerHTML = `
+                <td colspan="5" class="text-center fw-bold">${tournamentData.groups.A.name}</td>
+            `;
+            matchSchedule.appendChild(groupATitle);
+            
+            tournamentData.groups.A.matches.forEach(match => {
+                const matchRow = document.createElement('tr');
+                matchRow.innerHTML = `
+                    <td>${formatDate(match.date)}</td>
+                    <td>${match.time}</td>
+                    <td>
+                        <div class="d-flex justify-content-between">
+                            <div class="team">${match.home}</div>
+                            <div class="vs">vs</div>
+                            <div class="team">${match.away}</div>
+                        </div>
+                    </td>
+                    <td>${match.status}</td>
+                    <td>${match.status === 'finished' ? `${match.score.home} - ${match.score.away}` : '-'}</td>
+                `;
+                matchSchedule.appendChild(matchRow);
+            });
+            
+            // Add matches for Group B
+            const groupBTitle = document.createElement('tr');
+            groupBTitle.innerHTML = `
+                <td colspan="5" class="text-center fw-bold">${tournamentData.groups.B.name}</td>
+            `;
+            matchSchedule.appendChild(groupBTitle);
+            
+            tournamentData.groups.B.matches.forEach(match => {
+                const matchRow = document.createElement('tr');
+                matchRow.innerHTML = `
+                    <td>${formatDate(match.date)}</td>
+                    <td>${match.time}</td>
+                    <td>
+                        <div class="d-flex justify-content-between">
+                            <div class="team">${match.home}</div>
+                            <div class="vs">vs</div>
+                            <div class="team">${match.away}</div>
+                        </div>
+                    </td>
+                    <td>${match.status}</td>
+                    <td>${match.status === 'finished' ? `${match.score.home} - ${match.score.away}` : '-'}</td>
+                `;
+                matchSchedule.appendChild(matchRow);
+            });
+        }
+
+        function renderStandings() {
+            calculateStandings();
+            
+            const tableHeaders = ['Pos', 'Team', 'P', 'W', 'D', 'L', 'Pts'];
+            
+            // Render Group A Standings
+            standingsTableA.innerHTML = `
+                <thead>
+                    <tr>
+                        ${tableHeaders.map(header => `<th>${header}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${Object.entries(tournamentData.standings.A)
+                        .sort((a, b) => b[1].points - a[1].points)
+                        .map(([team, data], index) => `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${team}</td>
+                                <td>${data.played}</td>
+                                <td>${data.won}</td>
+                                <td>${data.drawn}</td>
+                                <td>${data.lost}</td>
+                                <td>${data.points}</td>
+                            </tr>
+                        `).join('')}
+                </tbody>
+            `;
+            
+            // Render Group B Standings
+            standingsTableB.innerHTML = `
+                <thead>
+                    <tr>
+                        ${tableHeaders.map(header => `<th>${header}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${Object.entries(tournamentData.standings.B)
+                        .sort((a, b) => b[1].points - a[1].points)
+                        .map(([team, data], index) => `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${team}</td>
+                                <td>${data.played}</td>
+                                <td>${data.won}</td>
+                                <td>${data.drawn}</td>
+                                <td>${data.lost}</td>
+                                <td>${data.points}</td>
+                            </tr>
+                        `).join('')}
+                </tbody>
+            `;
+        }
+
+        function calculateStandings() {
+            // Initialize standings
+            Object.keys(tournamentData.groups).forEach(groupKey => {
+                const group = tournamentData.groups[groupKey];
+                group.teams.forEach(team => {
+                    tournamentData.standings[groupKey][team] = {
+                        played: 0,
+                        won: 0,
+                        drawn: 0,
+                        lost: 0,
+                        points: 0
+                    };
+                });
+                
+                // Calculate standings based on match results
+                group.matches.forEach(match => {
+                    if (match.status === 'finished') {
+                        const homeTeam = match.home;
+                        const awayTeam = match.away;
+                        
+                        // Update both teams' played count
+                        tournamentData.standings[groupKey][homeTeam].played++;
+                        tournamentData.standings[groupKey][awayTeam].played++;
+                        
+                        // Determine result
+                        if (match.score.home > match.score.away) {
+                            // Home team wins
+                            tournamentData.standings[groupKey][homeTeam].won++;
+                            tournamentData.standings[groupKey][homeTeam].points += 3;
+                            tournamentData.standings[groupKey][awayTeam].lost++;
+                        } else if (match.score.home < match.score.away) {
+                            // Away team wins
+                            tournamentData.standings[groupKey][awayTeam].won++;
+                            tournamentData.standings[groupKey][awayTeam].points += 3;
+                            tournamentData.standings[groupKey][homeTeam].lost++;
+                        } else {
+                            // Draw
+                            tournamentData.standings[groupKey][homeTeam].drawn++;
+                            tournamentData.standings[groupKey][awayTeam].drawn++;
+                            tournamentData.standings[groupKey][homeTeam].points += 1;
+                            tournamentData.standings[groupKey][awayTeam].points += 1;
+                        }
+                    }
+                });
+            });
+        }
+
+        function setupEventListeners() {
+            // Admin login
+            document.getElementById('adminLoginBtn').addEventListener('click', function() {
+                const id = document.getElementById('adminId').value;
+                const pass = document.getElementById('adminPass').value;
+                
+                if (id === tournamentData.admin.id && pass === tournamentData.admin.pass) {
+                    const loginModal = bootstrap.Modal.getInstance(document.getElementById('adminLoginModal'));
+                    loginModal.hide();
+                    const adminModalInstance = bootstrap.Modal.getOrCreateInstance(adminModal);
+                    adminModalInstance.show();
+                    
+                    // Populate score update form
+                    populateScoreUpdateForm();
+                } else {
+                    alert('Invalid admin credentials');
+                }
+            });
+            
+            // Score update form submission
+            document.getElementById('scoreUpdateForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateMatchScores(this);
+            });
+            
+            // Add match form submission
+            document.getElementById('addMatchForm')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewMatch();
+            });
+            
+            // Add goal button
+            document.querySelector('.add-goal-btn')?.addEventListener('click', function() {
+                addGoalField();
+            });
+        }
+
+        function populateScoreUpdateForm() {
+            scoreUpdateTableBody.innerHTML = '';
+            
+            Object.entries(tournamentData.groups).forEach(([groupKey, group]) => {
+                group.matches.forEach(match => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${group.name}</td>
+                        <td>${match.home} vs ${match.away}</td>
+                        <td>${match.date} ${match.time}</td>
+                        <td>${match.home}</td>
+                        <td>${match.away}</td>
+                        <td>
+                            <select class="form-select" name="status-${groupKey}-${match.id}" required>
+                                <option value="upcoming" ${match.status === 'upcoming' ? 'selected' : ''}>Upcoming</option>
+                                <option value="finished" ${match.status === 'finished' ? 'selected' : ''}>Finished</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div class="row g-1">
+                                <div class="col">
+                                    <input type="number" class="form-control" name="home-score-${groupKey}-${match.id}" min="0" ${match.status === 'upcoming' ? 'disabled' : ''} value="${match.score?.home || ''}">
+                                </div>
+                                <div class="col-auto text-center">-</div>
+                                <div class="col">
+                                    <input type="number" class="form-control" name="away-score-${groupKey}-${match.id}" min="0" ${match.status === 'upcoming' ? 'disabled' : ''} value="${match.score?.away || ''}">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <textarea class="form-control" name="goals-${groupKey}-${match.id}" rows="2" ${match.status === 'upcoming' ? 'disabled' : ''}>${match.goals.map(g => `${g.scorer}, ${g.time}`).join('\n')}</textarea>
+                        </td>
+                    `;
+                    
+                    scoreUpdateTableBody.appendChild(row);
+                });
+            });
+            
+            // Add event listener for status change
+            document.querySelectorAll('[name^="status-"]').forEach(select => {
+                select.addEventListener('change', function() {
+                    const matchId = this.name.split('-')[2];
+                    const groupKey = this.name.split('-')[1];
+                    const homeScoreInput = document.querySelector(`[name="home-score-${groupKey}-${matchId}"]`);
+                    const awayScoreInput = document.querySelector(`[name="away-score-${groupKey}-${matchId}"]`);
+                    const goalsTextarea = document.querySelector(`[name="goals-${groupKey}-${matchId}"]`);
+                    
+                    if (this.value === 'finished') {
+                        homeScoreInput.disabled = false;
+                        awayScoreInput.disabled = false;
+                        goalsTextarea.disabled = false;
+                    } else {
+                        homeScoreInput.disabled = true;
+                        awayScoreInput.disabled = true;
+                        goalsTextarea.disabled = true;
+                    }
+                });
+            });
+        }
+
+        function updateMatchScores(form) {
+            Object.entries(tournamentData.groups).forEach(([groupKey, group]) => {
+                group.matches.forEach(match => {
+                    const statusSelect = form[`status-${groupKey}-${match.id}`];
+                    const newStatus = statusSelect.value;
+                    
+                    match.status = newStatus;
+                    
+                    if (newStatus === 'finished') {
+                        const homeScore = parseInt(form[`home-score-${groupKey}-${match.id}`].value);
+                        const awayScore = parseInt(form[`away-score-${groupKey}-${match.id}`].value);
+                        const goalsText = form[`goals-${groupKey}-${match.id}`].value;
+                        
+                        match.score = { home: homeScore, away: awayScore };
+                        
+                        // Parse goals from textarea
+                        match.goals = [];
+                        if (goalsText) {
+                            const goalsArray = goalsText.split('\n');
+                            goalsArray.forEach(goalStr => {
+                                if (goalStr.trim()) {
+                                    const [scorer, timeStr] = goalStr.split(',');
+                                    if (scorer && timeStr) {
+                                        match.goals.push({
+                                            scorer: scorer.trim(),
+                                            time: parseInt(timeStr.trim())
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    } else {
+                        match.score = null;
+                        match.goals = [];
+                    }
+                });
+            });
+            
+            // Update UI
+            renderMatches();
+            renderStandings();
+            
+            // Show success message
+            alert('Scores updated successfully!');
+        }
+
+        function addNewMatch() {
+            const groupKey = document.getElementById('groupSelect').value;
+            const matchDate = document.getElementById('matchDate').value;
+            const homeTeam = document.getElementById('homeTeam').value;
+            const awayTeam = document.getElementById('awayTeam').value;
+            const matchStatus = document.getElementById('matchStatus').value;
+            const homeScore = parseInt(document.getElementById('homeScore').value) || 0;
+            const awayScore = parseInt(document.getElementById('awayScore').value) || 0;
+            
+            // Create new match ID (simple increment)
+            const group = tournamentData.groups[groupKey];
+            const newId = group.matches.length > 0 ? Math.max(...group.matches.map(m => m.id)) + 1 : 1;
+            
+            // Collect goals
+            const goals = [];
+            document.querySelectorAll('#goalsList .goal-item').forEach(item => {
+                const scorer = item.querySelector('input[type="text"]').value;
+                const time = item.querySelector('input[type="number"]').value;
+                if (scorer && time) {
+                    goals.push({ scorer, time: parseInt(time) });
+                }
+            });
+            
+            // Add new match
+            group.matches.push({
+                id: newId,
+                home: homeTeam,
+                away: awayTeam,
+                date: matchDate,
+                time: matchStatus === 'finished' ? '20:00' : 'TBD',
+                status: matchStatus,
+                score: matchStatus === 'finished' ? { home: homeScore, away: awayScore } : null,
+                goals: goals
+            });
+            
+            // Add teams to group if they don't exist
+            if (!group.teams.includes(homeTeam)) group.teams.push(homeTeam);
+            if (!group.teams.includes(awayTeam)) group.teams.push(awayTeam);
+            
+            // Update UI
+            renderMatches();
+            renderStandings();
+            
+            // Reset form and close modal
+            document.getElementById('addMatchForm').reset();
+            const goalsListItems = document.querySelectorAll('#goalsList .goal-item');
+            goalsListItems.forEach((item, index) => {
+                if (index > 0) goalsList.removeChild(item);
+            });
+            const modal = bootstrap.Modal.getInstance(adminModal);
+            modal.hide();
+            
+            alert('Match added successfully!');
+        }
+
+        function addGoalField() {
+            const goalsList = document.getElementById('goalsList');
+            const newGoalItem = document.createElement('div');
+            newGoalItem.className = 'row mb-2 goal-item';
+            newGoalItem.innerHTML = `
+                <div class="col-md-8">
+                    <input type="text" class="form-control" placeholder="Scorer name">
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control" placeholder="Minute" min="1">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-sm btn-danger remove-goal">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            goalsList.appendChild(newGoalItem);
+            
+            // Add remove button handler to the new item
+            newGoalItem.querySelector('.remove-goal').addEventListener('click', function() {
+                goalsList.removeChild(newGoalItem);
+            });
+        }
+
+        // Helper Functions
+        function formatDate(dateString) {
+            const options = { month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+    </script>
+</body>
+</html>
