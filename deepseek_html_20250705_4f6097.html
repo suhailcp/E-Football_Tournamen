@@ -1,0 +1,2976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Football Champions League | Next Generation Esports</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff4d4d;
+            --text: #333;
+            --text-light: #f8f9fa;
+            --bg: #f8f9fa;
+            --card-bg: #fff;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --footer-bg: #343a40;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #8a2be2;
+            --secondary: #4169e1;
+            --text: #f8f9fa;
+            --text-light: #333;
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --nav-bg: rgba(30, 30, 30, 0.9);
+            --footer-bg: #0d0d0d;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 1.5rem;
+        }
+
+        .theme-toggle:hover {
+            color: var(--primary);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(37, 117, 252, 0.7);
+            }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: var(--text);
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            min-width: 80px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6);
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::after {
+            left: 100%;
+        }
+
+        /* Live Ticker */
+        .live-ticker {
+            background-color: var(--danger);
+            color: white;
+            padding: 0.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ticker-content {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            animation: ticker 30s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .live-badge {
+            background-color: white;
+            color: var(--danger);
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-right: 1rem;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        /* Sections */
+        .section {
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            display: inline-block;
+            position: relative;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Upcoming Matches */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .match-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .match-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .match-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .match-body {
+            padding: 1.5rem;
+        }
+
+        .teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+        }
+
+        .team-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .team-name {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .vs {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .match-details {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text);
+        }
+
+        .match-time {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .match-venue {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .match-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Featured Teams */
+        .featured-teams {
+            background: linear-gradient(135deg, rgba(106, 17, 203, 0.1), rgba(37, 117, 252, 0.1)));
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .teams-slider {
+            display: flex;
+            overflow-x: auto;
+            gap: 2rem;
+            padding: 1rem 0;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .teams-slider::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .teams-slider::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .team-card {
+            scroll-snap-align: start;
+            flex: 0 0 250px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .team-card:hover {
+            transform: scale(1.05);
+        }
+
+        .team-card-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .team-card-body {
+            padding: 1.5rem;
+        }
+
+        .team-card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-card-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Group Stage */
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .group-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .group-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .standings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .standings-table th, .standings-table td {
+            padding: 0.8rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .standings-table th {
+            background-color: rgba(0, 0, 0, 0.05);
+            font-weight: bold;
+        }
+
+        .standings-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .team-cell {
+            display: flex;
+            align-items: center;
+        }
+
+        .team-cell img {
+            width: 25px;
+            height: 25px;
+            margin-right: 0.5rem;
+        }
+
+        .qualified {
+            background-color: rgba(40, 167, 69, 0.1);
+            font-weight: bold;
+        }
+
+        /* Knockout Stage */
+        .bracket {
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 2rem 0;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            min-width: 200px;
+            margin: 0 1rem;
+        }
+
+        .round-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .matchup {
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .matchup::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            width: 20px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .matchup::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -20px;
+            width: 20px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .round:first-child .matchup::before,
+        .round:last-child .matchup::after {
+            display: none;
+        }
+
+        .team-bracket {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            margin: 0.2rem 0;
+            background-color: var(--card-bg);
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .team-bracket:hover {
+            transform: translateX(5px);
+        }
+
+        .team-bracket img {
+            width: 20px;
+            height: 20px;
+            margin-right: 0.5rem;
+        }
+
+        .team-bracket.winner {
+            background-color: rgba(40, 167, 69, 0.2);
+            font-weight: bold;
+        }
+
+        .team-bracket .score {
+            margin-left: auto;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .final-match {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.2)));
+            border: 2px solid gold;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .final-match h3 {
+            color: gold;
+            margin-bottom: 1rem;
+        }
+
+        .champion {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+            animation: pulseGold 2s infinite;
+        }
+
+        @keyframes pulseGold {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            }
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+        }
+
+        .champion img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Scoreboard */
+        .scoreboard-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .scoreboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .stat-card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        /* Schedule */
+        .calendar {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .calendar-nav button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar-day-header {
+            padding: 0.5rem;
+            text-align: center;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-day {
+            padding: 0.5rem;
+            min-height: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .calendar-day.empty {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .day-number {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8rem;
+        }
+
+        .calendar-event {
+            background-color: rgba(106, 17, 203, 0.1);
+            border-left: 3px solid var(--primary);
+            padding: 0.2rem 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-event:hover {
+            background-color: rgba(106, 17, 203, 0.2);
+        }
+
+        /* Admin Panel */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .admin-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .admin-tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .admin-tab:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .admin-form {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-table th {
+            background-color: rgba(0, 0, 0, 0.05);
+            font-weight: bold;
+        }
+
+        .admin-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        /* Login Form */
+        .login-container {
+            max-width: 500px;
+            margin: 5rem auto;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        /* Highlights */
+        .highlights-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .highlight-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .highlight-video {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .highlight-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .highlight-body {
+            padding: 1.5rem;
+        }
+
+        .highlight-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-desc {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--nav-bg);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                transition: var(--transition);
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 1rem 0;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .countdown {
+                flex-wrap: wrap;
+            }
+
+            .form-row {
+                flex-direction: column;
+            }
+
+            .round {
+                min-width: 150px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .countdown-item {
+                min-width: 60px;
+            }
+
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Particles -->
+    <header>
+        <div class="particles" id="particles"></div>
+        <div class="header-content">
+            <h1>E-Football Champions League</h1>
+            <p>The ultimate virtual football competition featuring the best teams and players from around the world</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-trophy"></i>
+                <span>EFCL</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#groups">Groups</a></li>
+                <li><a href="#knockout">Knockout</a></li>
+                <li><a href="#scoreboard">Scoreboard</a></li>
+                <li><a href="#schedule">Schedule</a></li>
+                <li><a href="#highlights">Highlights</a></li>
+                <li><a href="#admin" id="admin-link">Admin</a></li>
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </ul>
+            <button class="hamburger" id="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Live Ticker -->
+    <div class="live-ticker">
+        <div class="ticker-content">
+            <span class="live-badge">LIVE</span>
+            <span>⚽ FC Barcelona 2 - 1 Real Madrid (75') | 🏆 Manchester City 3 - 0 Bayern Munich (FINAL) | ⚽ PSG vs Liverpool starting in 30 minutes | 🎟️ Limited tickets available for Grand Final!</span>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1 class="fade-in">E-Football Champions League 2023</h1>
+        <p class="fade-in delay-1">Experience the thrill of virtual football at its finest. The most prestigious tournament in e-football is back with more teams, more action, and more excitement!</p>
+        
+        <div class="countdown fade-in delay-2">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">12</div>
+                <div class="countdown-label">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">06</div>
+                <div class="countdown-label">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">45</div>
+                <div class="countdown-label">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">30</div>
+                <div class="countdown-label">Seconds</div>
+            </div>
+        </div>
+        
+        <div class="fade-in delay-3">
+            <a href="#schedule" class="cta-button">View Schedule</a>
+            <a href="#groups" class="cta-button">See Groups</a>
+        </div>
+    </section>
+
+    <!-- Upcoming Matches Section -->
+    <section class="section">
+        <div class="section-title">
+            <h2>Upcoming Matches</h2>
+        </div>
+        
+        <div class="matches-grid">
+            <!-- Match Card 1 -->
+            <div class="match-card fade-in">
+                <div class="match-header">Group A</div>
+                <div class="match-body">
+                    <div class="teams">
+                        <div class="team">
+                            <img src="https://via.placeholder.com/60x60?text=FCB" alt="FC Barcelona" class="team-logo">
+                            <div class="team-name">FC Barcelona</div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team">
+                            <img src="https://via.placeholder.com/60x60?text=RM" alt="Real Madrid" class="team-logo">
+                            <div class="team-name">Real Madrid</div>
+                        </div>
+                    </div>
+                    <div class="match-details">
+                        <div class="match-time">Today, 20:45 CET</div>
+                        <div class="match-venue">Camp Nou, Barcelona</div>
+                    </div>
+                </div>
+                <div class="match-status">Upcoming</div>
+            </div>
+            
+            <!-- Match Card 2 -->
+            <div class="match-card fade-in delay-1">
+                <div class="match-header">Group B</div>
+                <div class="match-body">
+                    <div class="teams">
+                        <div class="team">
+                            <img src="https://via.placeholder.com/60x60?text=MCI" alt="Man City" class="team-logo">
+                            <div class="team-name">Man City</div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team">
+                            <img src="https://via.placeholder.com/60x60?text=BAY" alt="Bayern" class="team-logo">
+                            <div class="team-name">Bayern</div>
+                        </div>
+                    </div>
+                    <div class="match-details">
+                        <div class="match-time">Tomorrow, 19:00 CET</div>
+                        <div class="match-venue">Etihad Stadium</div>
+                    </div>
+                </div>
+                <div class="match-status">Upcoming</div>
+            </div>
+            
+            <!-- Match Card 3 -->
+            <div class="match-card fade-in delay-2">
+                <div class="match-header">Group C</div>
+                <div class="match-body">
+                    <div class="teams">
+                        <div class="team">
+                            <img src="https://via.placeholder.com/60x60?text=LIV" alt="Liverpool" class="team-logo">
+                            <div class="team-name">Liverpool</div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team">
+                            <img src="https://via.placeholder.com/60x60?text=PSG" alt="PSG" class="team-logo">
+                            <div class="team-name">PSG</div>
+                        </div>
+                    </div>
+                    <div class="match-details">
+                        <div class="match-time">Tomorrow, 21:00 CET</div>
+                        <div class="match-venue">Anfield</div>
+                    </div>
+                </div>
+                <div class="match-status">Upcoming</div>
+            </div>
+        </div>
+        
+        <!-- Featured Teams -->
+        <div class="featured-teams fade-in delay-3">
+            <h3 style="text-align: center; margin-bottom: 1rem;">Featured Teams</h3>
+            <div class="teams-slider">
+                <!-- Team Card 1 -->
+                <div class="team-card">
+                    <img src="https://via.placeholder.com/300x150?text=FC+Barcelona" alt="FC Barcelona" class="team-card-img">
+                    <div class="team-card-body">
+                        <h3 class="team-card-title">FC Barcelona</h3>
+                        <p>Current champions with 3 titles</p>
+                        <div class="team-card-stats">
+                            <div class="stat">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Wins</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">35</div>
+                                <div class="stat-label">Goals</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Titles</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Card 2 -->
+                <div class="team-card">
+                    <img src="https://via.placeholder.com/300x150?text=Man+City" alt="Man City" class="team-card-img">
+                    <div class="team-card-body">
+                        <h3 class="team-card-title">Manchester City</h3>
+                        <p>Premier League representatives</p>
+                        <div class="team-card-stats">
+                            <div class="stat">
+                                <div class="stat-value">10</div>
+                                <div class="stat-label">Wins</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">28</div>
+                                <div class="stat-label">Goals</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">2</div>
+                                <div class="stat-label">Titles</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Card 3 -->
+                <div class="team-card">
+                    <img src="https://via.placeholder.com/300x150?text=Bayern" alt="Bayern" class="team-card-img">
+                    <div class="team-card-body">
+                        <h3 class="team-card-title">Bayern Munich</h3>
+                        <p>German champions</p>
+                        <div class="team-card-stats">
+                            <div class="stat">
+                                <div class="stat-value">9</div>
+                                <div class="stat-label">Wins</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">32</div>
+                                <div class="stat-label">Goals</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Titles</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Card 4 -->
+                <div class="team-card">
+                    <img src="https://via.placeholder.com/300x150?text=PSG" alt="PSG" class="team-card-img">
+                    <div class="team-card-body">
+                        <h3 class="team-card-title">Paris Saint-Germain</h3>
+                        <p>French champions</p>
+                        <div class="team-card-stats">
+                            <div class="stat">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Wins</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">27</div>
+                                <div class="stat-label">Goals</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">1</div>
+                                <div class="stat-label">Titles</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Group Stage Section -->
+    <section class="section" id="groups">
+        <div class="section-title">
+            <h2>Group Stage</h2>
+        </div>
+        
+        <div class="groups-container">
+            <!-- Group A -->
+            <div class="group-card fade-in">
+                <div class="group-header">Group A</div>
+                <div class="group-body">
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th>Team</th>
+                                <th>MP</th>
+                                <th>W</th>
+                                <th>D</th>
+                                <th>L</th>
+                                <th>Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=FCB" alt="FC Barcelona">
+                                    <span>FC Barcelona</span>
+                                </td>
+                                <td>5</td>
+                                <td>4</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>13</td>
+                            </tr>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=RM" alt="Real Madrid">
+                                    <span>Real Madrid</span>
+                                </td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=JUV" alt="Juventus">
+                                    <span>Juventus</span>
+                                </td>
+                                <td>5</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=GAL" alt="Galatasaray">
+                                    <span>Galatasaray</span>
+                                </td>
+                                <td>5</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>5</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Group B -->
+            <div class="group-card fade-in delay-1">
+                <div class="group-header">Group B</div>
+                <div class="group-body">
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th>Team</th>
+                                <th>MP</th>
+                                <th>W</th>
+                                <th>D</th>
+                                <th>L</th>
+                                <th>Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=MCI" alt="Man City">
+                                    <span>Man City</span>
+                                </td>
+                                <td>5</td>
+                                <td>4</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>12</td>
+                            </tr>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=BAY" alt="Bayern">
+                                    <span>Bayern</span>
+                                </td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=ATM" alt="Atletico">
+                                    <span>Atletico</span>
+                                </td>
+                                <td>5</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>3</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=DOR" alt="Dortmund">
+                                    <span>Dortmund</span>
+                                </td>
+                                <td>5</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>4</td>
+                                <td>3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Group C -->
+            <div class="group-card fade-in delay-2">
+                <div class="group-header">Group C</div>
+                <div class="group-body">
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th>Team</th>
+                                <th>MP</th>
+                                <th>W</th>
+                                <th>D</th>
+                                <th>L</th>
+                                <th>Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=LIV" alt="Liverpool">
+                                    <span>Liverpool</span>
+                                </td>
+                                <td>5</td>
+                                <td>4</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>13</td>
+                            </tr>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=PSG" alt="PSG">
+                                    <span>PSG</span>
+                                </td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=INT" alt="Inter">
+                                    <span>Inter</span>
+                                </td>
+                                <td>5</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>3</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=AJX" alt="Ajax">
+                                    <span>Ajax</span>
+                                </td>
+                                <td>5</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>4</td>
+                                <td>1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Group D -->
+            <div class="group-card fade-in delay-3">
+                <div class="group-header">Group D</div>
+                <div class="group-body">
+                    <table class="standings-table">
+                        <thead>
+                            <tr>
+                                <th>Team</th>
+                                <th>MP</th>
+                                <th>W</th>
+                                <th>D</th>
+                                <th>L</th>
+                                <th>Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=CHE" alt="Chelsea">
+                                    <span>Chelsea</span>
+                                </td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td>2</td>
+                                <td>0</td>
+                                <td>11</td>
+                            </tr>
+                            <tr class="qualified">
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=MUN" alt="Man Utd">
+                                    <span>Man Utd</span>
+                                </td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=ACM" alt="AC Milan">
+                                    <span>AC Milan</span>
+                                </td>
+                                <td>5</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>3</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td class="team-cell">
+                                    <img src="https://via.placeholder.com/25x25?text=POR" alt="Porto">
+                                    <span>Porto</span>
+                                </td>
+                                <td>5</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>4</td>
+                                <td>3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Knockout Stage Section -->
+    <section class="section" id="knockout">
+        <div class="section-title">
+            <h2>Knockout Stage</h2>
+        </div>
+        
+        <div class="bracket">
+            <!-- Semifinal 1 -->
+            <div class="round">
+                <div class="round-title">Semifinals</div>
+                <div class="matchup">
+                    <div class="team-bracket winner">
+                        <img src="https://via.placeholder.com/20x20?text=FCB" alt="FC Barcelona">
+                        <span>FC Barcelona</span>
+                        <span class="score">3</span>
+                    </div>
+                    <div class="team-bracket">
+                        <img src="https://via.placeholder.com/20x20?text=MCI" alt="Man City">
+                        <span>Man City</span>
+                        <span class="score">1</span>
+                    </div>
+                </div>
+                <div class="matchup">
+                    <div class="team-bracket">
+                        <img src="https://via.placeholder.com/20x20?text=LIV" alt="Liverpool">
+                        <span>Liverpool</span>
+                        <span class="score">2</span>
+                    </div>
+                    <div class="team-bracket winner">
+                        <img src="https://via.placeholder.com/20x20?text=RM" alt="Real Madrid">
+                        <span>Real Madrid</span>
+                        <span class="score">3</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Final -->
+            <div class="round">
+                <div class="round-title">Final</div>
+                <div class="matchup">
+                    <div class="team-bracket">
+                        <img src="https://via.placeholder.com/20x20?text=FCB" alt="FC Barcelona">
+                        <span>FC Barcelona</span>
+                        <span class="score">-</span>
+                    </div>
+                    <div class="team-bracket">
+                        <img src="https://via.placeholder.com/20x20?text=RM" alt="Real Madrid">
+                        <span>Real Madrid</span>
+                        <span class="score">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="final-match">
+            <h3>Grand Final - Coming Soon</h3>
+            <p>The ultimate showdown between FC Barcelona and Real Madrid will take place on June 10th at 20:00 CET.</p>
+            
+            <!-- This would be shown after the final is completed -->
+            <!-- <div class="champion">
+                <img src="https://via.placeholder.com/80x80?text=FCB" alt="Champion">
+                <h3>FC Barcelona</h3>
+                <p>2023 E-Football Champions League Winners</p>
+                <p>Final Score: 3-2</p>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Scoreboard Section -->
+    <section class="section" id="scoreboard">
+        <div class="section-title">
+            <h2>Scoreboard</h2>
+        </div>
+        
+        <div class="scoreboard-container">
+            <div class="scoreboard-header">
+                <h3>Team Rankings</h3>
+                <div class="filter-options">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Group A</button>
+                    <button class="filter-btn">Group B</button>
+                    <button class="filter-btn">Group C</button>
+                    <button class="filter-btn">Group D</button>
+                    <button class="filter-btn">Knockout</button>
+                </div>
+            </div>
+            
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Team</th>
+                        <th>MP</th>
+                        <th>W</th>
+                        <th>D</th>
+                        <th>L</th>
+                        <th>GF</th>
+                        <th>GA</th>
+                        <th>GD</th>
+                        <th>Pts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="team-cell">
+                            <img src="https://via.placeholder.com/25x25?text=FCB" alt="FC Barcelona">
+                            <span>FC Barcelona</span>
+                        </td>
+                        <td>5</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>12</td>
+                        <td>2</td>
+                        <td>+10</td>
+                        <td>13</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="team-cell">
+                            <img src="https://via.placeholder.com/25x25?text=LIV" alt="Liverpool">
+                            <span>Liverpool</span>
+                        </td>
+                        <td>5</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>11</td>
+                        <td>3</td>
+                        <td>+8</td>
+                        <td>13</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="team-cell">
+                            <img src="https://via.placeholder.com/25x25?text=MCI" alt="Man City">
+                            <span>Man City</span>
+                        </td>
+                        <td>5</td>
+                        <td>4</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>10</td>
+                        <td>4</td>
+                        <td>+6</td>
+                        <td>12</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="team-cell">
+                            <img src="https://via.placeholder.com/25x25?text=CHE" alt="Chelsea">
+                            <span>Chelsea</span>
+                        </td>
+                        <td>5</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>0</td>
+                        <td>9</td>
+                        <td>3</td>
+                        <td>+6</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="team-cell">
+                            <img src="https://via.placeholder.com/25x25?text=RM" alt="Real Madrid">
+                            <span>Real Madrid</span>
+                        </td>
+                        <td>5</td>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>8</td>
+                        <td>5</td>
+                        <td>+3</td>
+                        <td>10</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-futbol"></i>
+                <h3>Top Scorer</h3>
+                <p>Lionel Messi (FCB) - 8 goals</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-assistive-listening-systems"></i>
+                <h3>Most Assists</h3>
+                <p>Kevin De Bruyne (MCI) - 6 assists</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-tshirt"></i>
+                <h3>Clean Sheets</h3>
+                <p>Alisson (LIV) - 4 clean sheets</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-star"></i>
+                <h3>MVP</h3>
+                <p>Kylian Mbappé (PSG) - Rating 8.7</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section class="section" id="schedule">
+        <div class="section-title">
+            <h2>Match Schedule</h2>
+        </div>
+        
+        <div class="calendar">
+            <div class="calendar-header">
+                <h3>June 2023</h3>
+                <div class="calendar-nav">
+                    <button><i class="fas fa-chevron-left"></i></button>
+                    <button><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="calendar-grid">
+                <div class="calendar-day-header">Sun</div>
+                <div class="calendar-day-header">Mon</div>
+                <div class="calendar-day-header">Tue</div>
+                <div class="calendar-day-header">Wed</div>
+                <div class="calendar-day-header">Thu</div>
+                <div class="calendar-day-header">Fri</div>
+                <div class="calendar-day-header">Sat</div>
+                
+                <!-- Calendar days -->
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day empty"></div>
+                <div class="calendar-day">
+                    <div class="day-number">1</div>
+                    <div class="calendar-event">Group A: FCB vs JUV</div>
+                    <div class="calendar-event">Group B: MCI vs BAY</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">2</div>
+                    <div class="calendar-event">Group C: LIV vs PSG</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">3</div>
+                    <div class="calendar-event">Group D: CHE vs MUN</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">4</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">5</div>
+                    <div class="calendar-event">Group A: RM vs FCB</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">6</div>
+                    <div class="calendar-event">Group B: BAY vs MCI</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">7</div>
+                    <div class="calendar-event">Group C: PSG vs LIV</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">8</div>
+                    <div class="calendar-event">Group D: MUN vs CHE</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">9</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">10</div>
+                    <div class="calendar-event">Final: FCB vs RM</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">11</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">12</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">13</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">14</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">15</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">16</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">17</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">18</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">19</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">20</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">21</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">22</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">23</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">24</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">25</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">26</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">27</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">28</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">29</div>
+                </div>
+                <div class="calendar-day">
+                    <div class="day-number">30</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlights Section -->
+    <section class="section" id="highlights">
+        <div class="section-title">
+            <h2>Match Highlights</h2>
+        </div>
+        
+        <div class="highlights-container">
+            <!-- Highlight 1 -->
+            <div class="highlight-card fade-in">
+                <div class="highlight-video">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="highlight-body">
+                    <h3 class="highlight-title">FC Barcelona vs Real Madrid - Semifinal Highlights</h3>
+                    <div class="highlight-meta">
+                        <span><i class="far fa-calendar-alt"></i> June 5, 2023</span>
+                        <span><i class="far fa-clock"></i> 5:32</span>
+                    </div>
+                    <p class="highlight-desc">Relive all the action from the thrilling semifinal clash between these two giants of e-football.</p>
+                </div>
+            </div>
+            
+            <!-- Highlight 2 -->
+            <div class="highlight-card fade-in delay-1">
+                <div class="highlight-video">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="highlight-body">
+                    <h3 class="highlight-title">Liverpool vs PSG - Group Stage Classic</h3>
+                    <div class="highlight-meta">
+                        <span><i class="far fa-calendar-alt"></i> June 2, 2023</span>
+                        <span><i class="far fa-clock"></i> 4:15</span>
+                    </div>
+                    <p class="highlight-desc">A back-and-forth battle that ended with a last-minute winner from Mohamed Salah.</p>
+                </div>
+            </div>
+            
+            <!-- Highlight 3 -->
+            <div class="highlight-card fade-in delay-2">
+                <div class="highlight-video">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="highlight-body">
+                    <h3 class="highlight-title">Man City vs Bayern - Tactical Masterclass</h3>
+                    <div class="highlight-meta">
+                        <span><i class="far fa-calendar-alt"></i> June 1, 2023</span>
+                        <span><i class="far fa-clock"></i> 6:45</span>
+                    </div>
+                    <p class="highlight-desc">Pep Guardiola's Man City outmaneuver Bayern in a match that showcased elite e-football strategy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Panel Section -->
+    <section class="section" id="admin" style="display: none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>EFCL Admin Panel</h2>
+                <p>Manage all aspects of the E-Football Champions League tournament</p>
+            </div>
+            
+            <div class="admin-tabs">
+                <div class="admin-tab active" data-tab="teams">Teams</div>
+                <div class="admin-tab" data-tab="matches">Matches</div>
+                <div class="admin-tab" data-tab="knockouts">Knockouts</div>
+                <div class="admin-tab" data-tab="results">Results</div>
+                <div class="admin-tab" data-tab="settings">Settings</div>
+            </div>
+            
+            <!-- Teams Tab -->
+            <div class="admin-content active" id="teams-tab">
+                <div class="admin-form">
+                    <h3>Add New Team</h3>
+                    <div class="form-group">
+                        <label for="team-name">Team Name</label>
+                        <input type="text" id="team-name" class="form-control" placeholder="Enter team name">
+                    </div>
+                    <div class="form-group">
+                        <label for="team-logo">Team Logo URL</label>
+                        <input type="text" id="team-logo" class="form-control" placeholder="Enter logo URL">
+                    </div>
+                    <div class="form-group">
+                        <label for="team-group">Group</label>
+                        <select id="team-group" class="form-control">
+                            <option value="A">Group A</option>
+                            <option value="B">Group B</option>
+                            <option value="C">Group C</option>
+                            <option value="D">Group D</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">Add Team</button>
+                </div>
+                
+                <h3>Current Teams</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Team</th>
+                            <th>Group</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/25x25?text=FCB" alt="FC Barcelona">
+                                <span>FC Barcelona</span>
+                            </td>
+                            <td>A</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/25x25?text=RM" alt="Real Madrid">
+                                <span>Real Madrid</span>
+                            </td>
+                            <td>A</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/25x25?text=MCI" alt="Man City">
+                                <span>Man City</span>
+                            </td>
+                            <td>B</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/25x25?text=BAY" alt="Bayern">
+                                <span>Bayern</span>
+                            </td>
+                            <td>B</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Matches Tab -->
+            <div class="admin-content" id="matches-tab">
+                <div class="admin-form">
+                    <h3>Add New Match</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="match-team1">Team 1</label>
+                            <select id="match-team1" class="form-control">
+                                <option value="">Select Team</option>
+                                <option value="1">FC Barcelona</option>
+                                <option value="2">Real Madrid</option>
+                                <option value="3">Man City</option>
+                                <option value="4">Bayern</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="match-team2">Team 2</label>
+                            <select id="match-team2" class="form-control">
+                                <option value="">Select Team</option>
+                                <option value="1">FC Barcelona</option>
+                                <option value="2">Real Madrid</option>
+                                <option value="3">Man City</option>
+                                <option value="4">Bayern</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="match-date">Date</label>
+                            <input type="date" id="match-date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="match-time">Time</label>
+                            <input type="time" id="match-time" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="match-stage">Stage</label>
+                        <select id="match-stage" class="form-control">
+                            <option value="group">Group Stage</option>
+                            <option value="semifinal">Semifinal</option>
+                            <option value="final">Final</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="match-group">Group (if applicable)</label>
+                        <select id="match-group" class="form-control">
+                            <option value="A">Group A</option>
+                            <option value="B">Group B</option>
+                            <option value="C">Group C</option>
+                            <option value="D">Group D</option>
+                            <option value="">N/A</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">Add Match</button>
+                </div>
+                
+                <h3>Upcoming Matches</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Team 1</th>
+                            <th>Team 2</th>
+                            <th>Date & Time</th>
+                            <th>Stage</th>
+                            <th>Group</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=FCB" alt="FC Barcelona">
+                                <span>FC Barcelona</span>
+                            </td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=RM" alt="Real Madrid">
+                                <span>Real Madrid</span>
+                            </td>
+                            <td>Jun 5, 2023 20:45</td>
+                            <td>Group</td>
+                            <td>A</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=MCI" alt="Man City">
+                                <span>Man City</span>
+                            </td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=BAY" alt="Bayern">
+                                <span>Bayern</span>
+                            </td>
+                            <td>Jun 6, 2023 19:00</td>
+                            <td>Group</td>
+                            <td>B</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Knockouts Tab -->
+            <div class="admin-content" id="knockouts-tab">
+                <div class="admin-form">
+                    <h3>Manage Knockout Stage</h3>
+                    <div class="form-group">
+                        <label for="knockout-type">Knockout Type</label>
+                        <select id="knockout-type" class="form-control">
+                            <option value="semifinal">Semifinal</option>
+                            <option value="final">Final</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="knockout-team1">Team 1</label>
+                            <select id="knockout-team1" class="form-control">
+                                <option value="">Select Team</option>
+                                <option value="1">FC Barcelona</option>
+                                <option value="2">Real Madrid</option>
+                                <option value="3">Man City</option>
+                                <option value="4">Bayern</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="knockout-team2">Team 2</label>
+                            <select id="knockout-team2" class="form-control">
+                                <option value="">Select Team</option>
+                                <option value="1">FC Barcelona</option>
+                                <option value="2">Real Madrid</option>
+                                <option value="3">Man City</option>
+                                <option value="4">Bayern</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="knockout-date">Date</label>
+                            <input type="date" id="knockout-date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="knockout-time">Time</label>
+                            <input type="time" id="knockout-time" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="knockout-title">Match Title (for Final)</label>
+                        <input type="text" id="knockout-title" class="form-control" placeholder="E.g., Grand Final">
+                    </div>
+                    <button class="btn btn-primary">Add Knockout Match</button>
+                </div>
+                
+                <h3>Current Knockout Matches</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Team 1</th>
+                            <th>Team 2</th>
+                            <th>Date & Time</th>
+                            <th>Stage</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=FCB" alt="FC Barcelona">
+                                <span>FC Barcelona</span>
+                            </td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=MCI" alt="Man City">
+                                <span>Man City</span>
+                            </td>
+                            <td>Jun 8, 2023 20:00</td>
+                            <td>Semifinal</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=LIV" alt="Liverpool">
+                                <span>Liverpool</span>
+                            </td>
+                            <td class="team-cell">
+                                <img src="https://via.placeholder.com/20x20?text=RM" alt="Real Madrid">
+                                <span>Real Madrid</span>
+                            </td>
+                            <td>Jun 9, 2023 20:00</td>
+                            <td>Semifinal</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Results Tab -->
+            <div class="admin-content" id="results-tab">
+                <div class="admin-form">
+                    <h3>Update Match Results</h3>
+                    <div class="form-group">
+                        <label for="result-match">Select Match</label>
+                        <select id="result-match" class="form-control">
+                            <option value="">Select Match</option>
+                            <option value="1">FC Barcelona vs Real Madrid (Jun 5)</option>
+                            <option value="2">Man City vs Bayern (Jun 6)</option>
+                            <option value="3">Liverpool vs PSG (Jun 2)</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="result-team1">Team 1 Score</label>
+                            <input type="number" id="result-team1" class="form-control" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="result-team2">Team 2 Score</label>
+                            <input type="number" id="result-team2" class="form-control" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="result-status">Match Status</label>
+                        <select id="result-status" class="form-control">
+                            <option value="upcoming">Upcoming</option>
+                            <option value="live">Live</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="result-highlights">Highlights URL (optional)</label>
+                        <input type="text" id="result-highlights" class="form-control" placeholder="YouTube URL">
+                    </div>
+                    <button class="btn btn-primary">Update Result</button>
+                </div>
+                
+                <h3>Recent Results</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Match</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>FC Barcelona vs Real Madrid</td>
+                            <td>3 - 1</td>
+                            <td>Completed</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Liverpool vs PSG</td>
+                            <td>2 - 1</td>
+                            <td>Completed</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Man City vs Bayern</td>
+                            <td>3 - 0</td>
+                            <td>Completed</td>
+                            <td class="action-btns">
+                                <button class="btn btn-primary btn-sm">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div class="admin-content" id="settings-tab">
+                <div class="admin-form">
+                    <h3>Tournament Settings</h3>
+                    <div class="form-group">
+                        <label for="tournament-name">Tournament Name</label>
+                        <input type="text" id="tournament-name" class="form-control" value="E-Football Champions League">
+                    </div>
+                    <div class="form-group">
+                        <label for="tournament-year">Year</label>
+                        <input type="text" id="tournament-year" class="form-control" value="2023">
+                    </div>
+                    <div class="form-group">
+                        <label for="tournament-logo">Logo URL</label>
+                        <input type="text" id="tournament-logo" class="form-control" placeholder="Enter logo URL">
+                    </div>
+                    <div class="form-group">
+                        <label for="featured-match">Featured Match (Homepage)</label>
+                        <select id="featured-match" class="form-control">
+                            <option value="">Select Match</option>
+                            <option value="1" selected>FC Barcelona vs Real Madrid</option>
+                            <option value="2">Man City vs Bayern</option>
+                            <option value="3">Liverpool vs PSG</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="show-countdown" checked> Show Countdown on Homepage
+                        </label>
+                    </div>
+                    <button class="btn btn-primary">Save Settings</button>
+                </div>
+                
+                <h3>Admin Account</h3>
+                <div class="admin-form">
+                    <div class="form-group">
+                        <label for="admin-username">Username</label>
+                        <input type="text" id="admin-username" class="form-control" value="admin" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" class="form-control" value="Eadmin">
+                    </div>
+                    <button class="btn btn-primary">Update Credentials</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="login-container" id="login-modal" style="display: none;">
+        <h2>Admin Login</h2>
+        <form class="login-form">
+            <div class="form-group">
+                <label for="login-username">Username</label>
+                <input type="text" id="login-username" class="form-control" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" class="form-control" placeholder="Enter password">
+            </div>
+            <button type="button" class="btn btn-primary" id="login-btn">Login</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>E-Football CL</h3>
+                <p>The premier virtual football competition featuring the best teams and players from around the world.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#groups">Group Stage</a></li>
+                    <li><a href="#knockout">Knockout Stage</a></li>
+                    <li><a href="#scoreboard">Scoreboard</a></li>
+                    <li><a href="#schedule">Schedule</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Teams</h3>
+                <ul class="footer-links">
+                    <li><a href="#">FC Barcelona</a></li>
+                    <li><a href="#">Real Madrid</a></li>
+                    <li><a href="#">Manchester City</a></li>
+                    <li><a href="#">Bayern Munich</a></li>
+                    <li><a href="#">Liverpool</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:info@efcl.com">info@efcl.com</a></li>
+                    <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+                    <li><a href="#">Sponsorship</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 E-Football Champions League. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or use preferred color scheme
+        const savedTheme = localStorage.getItem('theme') || 
+                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        // Apply the saved theme
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Update icon and save preference
+            if (body.classList.contains('dark-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Mobile Navigation
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.innerHTML = navLinks.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Countdown Timer
+        function updateCountdown() {
+            const now = new Date();
+            const tournamentDate = new Date('June 10, 2023 20:00:00');
+            const diff = tournamentDate - now;
+            
+            if (diff <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Admin Panel Login
+        const adminLink = document.getElementById('admin-link');
+        const adminSection = document.getElementById('admin');
+        const loginModal = document.getElementById('login-modal');
+        const loginBtn = document.getElementById('login-btn');
+        
+        adminLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Check if already logged in (for demo purposes)
+            const isLoggedIn = sessionStorage.getItem('loggedIn') === 'true';
+            
+            if (isLoggedIn) {
+                // Show admin panel
+                document.querySelectorAll('section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                adminSection.style.display = 'block';
+                window.scrollTo(0, 0);
+            } else {
+                // Show login modal
+                loginModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        });
+        
+        loginBtn.addEventListener('click', () => {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Simple validation (in a real app, this would be more secure)
+            if (username === 'admin' && password === 'Eadmin') {
+                // Hide login modal
+                loginModal.style.display = 'none';
+                document.body.style.overflow = '';
+                
+                // Show admin panel
+                document.querySelectorAll('section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                adminSection.style.display = 'block';
+                window.scrollTo(0, 0);
+                
+                // Set logged in state
+                sessionStorage.setItem('loggedIn', 'true');
+            } else {
+                alert('Invalid credentials. Try admin / Eadmin');
+            }
+        });
+        
+        // Admin Tabs
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        
+        adminTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                adminTabs.forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Create particles for header
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration between 10s and 20s
+                const duration = Math.random() * 10 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#admin') return; // Handled separately
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Highlight active section in navigation
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Filter buttons for scoreboard
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // In a real app, this would filter the table data
+                // For demo, we'll just show an alert
+                const filter = button.textContent;
+                if (filter !== 'All') {
+                    alert(`Filtering by ${filter}. In a real app, this would show only ${filter} teams.`);
+                }
+            });
+        });
+        
+        // Simulate match results update
+        function simulateMatchUpdates() {
+            const matches = [
+                { id: 1, team1: 'FC Barcelona', team2: 'Real Madrid', score1: 3, score2: 1 },
+                { id: 2, team1: 'Man City', team2: 'Bayern', score1: 3, score2: 0 },
+                { id: 3, team1: 'Liverpool', team2: 'PSG', score1: 2, score2: 1 }
+            ];
+            
+            // Randomly select a match to update
+            const randomMatch = matches[Math.floor(Math.random() * matches.length)];
+            
+            // Update live ticker
+            const tickerContent = document.querySelector('.ticker-content');
+            tickerContent.innerHTML = `
+                <span class="live-badge">LIVE</span>
+                <span>⚽ ${randomMatch.team1} ${randomMatch.score1} - ${randomMatch.score2} ${randomMatch.team2} (${Math.floor(Math.random() * 90)}') | 🏆 Grand Final in 3 days!</span>
+            `;
+        }
+        
+        // Update every 10 seconds
+        setInterval(simulateMatchUpdates, 10000);
+        simulateMatchUpdates();
+    </script>
+</body>
+</html>
